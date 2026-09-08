@@ -24,6 +24,14 @@ if not torch.cuda.is_available():
     torch.cuda.manual_seed = lambda *a, **k: None
     torch.cuda.manual_seed_all = lambda *a, **k: None
 
+    _orig_load = torch.load
+    def _cpu_load(*a, **k):
+        m = k.get('map_location', None)
+        if isinstance(m, torch.device) and m.type == 'cuda':
+            k['map_location'] = torch.device('cpu')
+        return _orig_load(*a, **k)
+    torch.load = _cpu_load
+
 def resolve_map_location(gpu_id=0):
     if torch.cuda.is_available():
         return torch.device(f'cuda:{gpu_id}')
