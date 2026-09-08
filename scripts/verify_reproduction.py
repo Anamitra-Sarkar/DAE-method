@@ -34,7 +34,7 @@ need("docs/paper_vs_repository.md", "paper vs repo")
 need("docs/experiment_scope.md", "scope")
 need("docs/DAE_methodology.md", "methodology")
 need("docs/reproduction_report.md", "report")
-need("CLIENT_README.md", "client readme")
+need("README.md", "front-page readme")
 need("scripts/inspect_brats.py", "inspect script")
 need("scripts/run_dae_reproduction.sh", "rerun entrypoint")
 
@@ -70,7 +70,7 @@ except Exception as e:
     fails.append(f"dataset manifest check failed: {e}")
 
 # no placeholders in docs (excluding pending-reference note in results)
-for d in ["CLIENT_README.md", "docs/reproduction_report.md", "docs/DAE_methodology.md"]:
+for d in ["README.md", "docs/reproduction_report.md", "docs/DAE_methodology.md"]:
     if (ROOT / d).exists():
         no_placeholders(d)
 

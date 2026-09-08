@@ -1,4 +1,4 @@
-"""Build client montage from test -save visualizations.
+"""Build montage from test -save visualizations.
 Expects <exp>/test_results/vis/overall/*.png named <label>_<name>.png (img|x_hat|map|mask).
 Picks 2 healthy + 2 tumor samples, saves artifacts/visualizations/montage.png
 plus per-sample panels. Usage: python scripts/make_montage.py --exp ~/Experiment/.../fold_0

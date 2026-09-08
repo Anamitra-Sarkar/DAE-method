@@ -1,4 +1,4 @@
-# Experiment Scope — DAE Reproduction for Client Delivery
+# Experiment Scope — DAE Reproduction (BraTS2021)
 
 ## Decision
 
