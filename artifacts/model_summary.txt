@@ -1,0 +1,6 @@
+UNet(in=1,out=1) params=31042369 (31.042M)
+depth=5 wf=6 first_width=64
+norm=GroupNorm act=CustomSwish conv=WNConv2d pool=avg_pool up=ConvTranspose2d
+criterion=AELoss (MSE)
+forward 2x1x128x128 -> x_hat 2x1x128x128 OK
+noise_res=16 noise_std=0.2 bilinear+roll+brats_mask verified

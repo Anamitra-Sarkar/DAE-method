@@ -1,0 +1,36 @@
+{
+  "method": "dae",
+  "dataset": "BraTS2021",
+  "input_size": 128,
+  "batch_size": 16,
+  "epochs": 250,
+  "seed": 0,
+  "fold": "0",
+  "gpu": "Tesla P100-PCIE-16GB",
+  "cuda_available": true,
+  "torch_version": "2.4.1+cu118",
+  "git_commit": "f9a52b93040159d06fe936a8586573a8633c4b9d",
+  "dataset_md5": "237f2aee77e099f7483808ddec49a57c",
+  "dataset_counts": {
+    "train": 4211,
+    "test_normal": 828,
+    "test_tumor": 1948,
+    "annotation": 1948
+  },
+  "train_command": "/usr/bin/python3 train.py -d brats -m dae -g 0 --input-size 128 -bs 16 -f 0 --train-seed 0",
+  "eval_command": "/usr/bin/python3 test.py -d brats -m dae -g 0 --input-size 128 -f 0 -save",
+  "train_seconds": 12091.790943145752,
+  "eval_seconds": 153.24858784675598,
+  "timestamp_utc": "2026-09-08T08:14:56.766736+00:00",
+  "metrics": {
+    "AUC": 0.8569906952752235,
+    "AP": 0.9328646346016387,
+    "PixAUC": 0.9675099299869194,
+    "PixAP": 0.7494917529499517,
+    "BestDice": 0.7058275200340047,
+    "BestThresh": 0.06801969,
+    "normal_score": 0.002745858,
+    "abnormal_score": 0.012112547
+  },
+  "source_commit": "507201cb8e604b7d970c388784f55c06bb32d013"
+}

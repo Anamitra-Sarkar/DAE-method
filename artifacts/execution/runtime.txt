@@ -1,0 +1,4 @@
+train_seconds=12091.8
+eval_seconds=153.2
+gpu=Tesla P100-PCIE-16GB
+torch=2.4.1+cu118

@@ -1,0 +1,34 @@
+# ---------- Options ---------- #
+dataset: brats
+isTrain: True
+
+
+-------- model --------
+name = 'dae'
+in_c = 1
+input_size = 128
+base_width = 16
+expansion = 1
+hidden_num = 1024
+ls = 16
+en_depth = 1
+de_depth = 1
+
+
+-------- train --------
+save_dir = '/root/Experiment/MedIAnomaly/brats/dae/fold_0'
+epochs = 250
+eval_freq = 25
+batch_size = 16
+lr = 0.001
+weight_decay = 0
+seed = 0
+
+
+-------- test --------
+save_flag = False
+save_dir = '/root/Experiment/MedIAnomaly/brats/dae/fold_0/test_results'
+model_path = '/root/Experiment/MedIAnomaly/brats/dae/fold_0/checkpoints/model.pth'
+
+
+-------- transform --------

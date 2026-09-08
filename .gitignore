@@ -1,0 +1,26 @@
+# secrets — never commit
+**/kaggle.json
+**/*kaggle*.json
+**/*token*.txt
+**/.env
+.env
+*.pem
+*.key
+# data / large artifacts (local only)
+*.tar.gz
+~/MedIAnomaly-Data/
+MedIAnomaly-Data/
+~/Experiment/
+Experiment/
+# python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+# checkpoints raw (keep manifest + metrics; checkpoint pushed via release/LFS if needed — see CLIENT_README)
+# uncomment to exclude large checkpoints from git:
+# artifacts/checkpoints/*.pt
+# misc
+.DS_Store
+.wandb/
+wandb/

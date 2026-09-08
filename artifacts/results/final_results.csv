@@ -1,0 +1,9 @@
+Metric,Published/Reference,Reproduced,Absolute_Difference
+AUC,N/A (no benchmark table in env),0.85699,N/A
+AP,N/A (no benchmark table in env),0.93286,N/A
+PixAUC,N/A (no benchmark table in env),0.96751,N/A
+PixAP,N/A (no benchmark table in env),0.74949,N/A
+BestDice,N/A (no benchmark table in env),0.70583,N/A
+BestThresh,N/A (no benchmark table in env),0.06802,N/A
+normal_score,N/A (no benchmark table in env),0.00275,N/A
+abnormal_score,N/A (no benchmark table in env),0.01211,N/A

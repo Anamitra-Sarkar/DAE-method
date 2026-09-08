@@ -1,0 +1,2 @@
+/usr/bin/python3 train.py -d brats -m dae -g 0 --input-size 128 -bs 16 -f 0 --train-seed 0
+EVAL: /usr/bin/python3 test.py -d brats -m dae -g 0 --input-size 128 -f 0 -save
