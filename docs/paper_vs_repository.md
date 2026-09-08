@@ -1,13 +1,16 @@
 # Paper vs Repository — DAE
 
-> Client PDFs (`DAE paper.pdf`, `medianomaly.pdf`, `DAE_Method_Explained.md`, `DAE_Implementation_Guide.md`) were **not available in this environment at audit time** (2026-09-08). Values below for “DAE paper/source” are therefore marked `Not specified (client PDF pending)` where the repo is the only verified source. The task brief itself states the verified DAE facts; those are used as the interim source and flagged accordingly. This file must be updated once PDFs are supplied — never invent missing source values.
+> PDFs received 2026-09-08 (`medianomaly.pdf`, 25 pp; `DAE paper.pdf`, 15 pp).
+> "DAE paper/source" column below is now filled from the actual PDFs. Benchmark
+> reference numbers come from `medianomaly.pdf` (same protocol we ran);
+> `DAE paper.pdf` values are cited only as excluded context (different setting).
 
 Upstream commit: `507201cb8e604b7d970c388784f55c06bb32d013`.
 
 | Component | DAE paper/source | MedIAnomaly implementation (verified in code) | Final reproduction |
 |---|---|---|---|
-| Noise resolution | Not specified (client PDF pending; brief states coarse noise) | `utils/dae_worker.py: self.noise_res = 16` | `16` |
-| Noise std | Not specified (client PDF pending; brief states 0.2) | `utils/dae_worker.py: self.noise_std = 0.2`, `torch.normal(mean=0, std=0.2)` at 16×16 | `0.2` |
+| Noise resolution | `DAE paper.pdf` Table 3: DAE (α = 16, σ = 0.2) | `utils/dae_worker.py: self.noise_res = 16` | `16` — match |
+| Noise std | `DAE paper.pdf` Table 3: DAE (α = 16, σ = 0.2) | `utils/dae_worker.py: self.noise_std = 0.2`, `torch.normal(mean=0, std=0.2)` at 16×16 | `0.2` — match |
 | Noise upsampling | Not specified (client PDF pending) | `F.interpolate(..., size=input_size, mode='bilinear', align_corners=True)` | bilinear to `input_size` |
 | Noise translation | Not specified (client PDF pending) | `torch.roll` by random `roll_x, roll_y` in `[0, input_size)` | random roll |
 | Foreground mask | Not specified (client PDF pending; brief states brain/BraTS mask) | `if dataset in ['brain','brats']: ns *= (x > x.min())` | applied for `brats` |
@@ -21,8 +24,26 @@ Upstream commit: `507201cb8e604b7d970c388784f55c06bb32d013`.
 | Training epochs | Not specified | `options.py: brats→250` | `250` unless feasibility forces documented reduction |
 | Batch size | Not specified | default `64`; DAE loop `-bs 16` | `16` |
 | Optimizer/LR | Not specified | `Adam(lr=1e-3, wd=0)`, no scheduler (commented out) | unchanged |
-| Metrics | Anomaly AUC/AP + segmentation where applicable (per brief) | `ae_worker.evaluate`: image `AUC/AP`; if `brats`: `PixAUC/PixAP/BestDice/BestThresh` + mean normal/abnormal scores | AUC/AP + PixAP/PixAUC/Dice; accuracy only supplemental |
-| Seed | Not specified | `--train-seed None` → random `1..999999` if unset | fixed seed recorded in manifest |
+| Metrics | `medianomaly.pdf` p.9: image AUC + AP; pixel APpix + ⌈Dice⌉ (best Dice at optimal test operating point); pixel AUC explicitly NOT used | `ae_worker.evaluate`: image `AUC/AP`; if `brats`: `PixAUC/PixAP/BestDice/BestThresh` + mean normal/abnormal scores | AUC/AP + PixAP/PixAUC/Dice; accuracy only supplemental. Note: our PixAUC has no published counterpart (paper excludes it by design) |
+| Seed | Paper: mean±std over 3 seeds | `--train-seed None` → random `1..999999` if unset | seed 0 (single-seed run vs 3-seed published mean — stated, not hidden) |
+
+## Published benchmark results vs reproduced (DAE + BraTS2021)
+
+Source: `medianomaly.pdf` Table 6 p.11 (DAE row, BraTS2021: AUC 85.9±1.0, AP 93.4±0.5)
+and Table 7 p.12 (DAE row: APpix 75.5±0.7, ⌈Dice⌉ 71.1±0.6). Paper terms mapped:
+AP→AP, APpix→PixAP, ⌈Dice⌉→BestDice.
+
+| Metric | Published (mean±std) | Reproduced (seed 0) | Diff | |Diff| | % | Within 1 std |
+|---|---|---|---|---|---|---|
+| AUC | 0.859±0.010 | 0.85699 | −0.00201 | 0.00201 | 0.23% | yes |
+| AP | 0.934±0.005 | 0.93286 | −0.00114 | 0.00114 | 0.12% | yes |
+| PixAP | 0.755±0.007 | 0.74949 | −0.00551 | 0.00551 | 0.73% | yes |
+| Dice | 0.711±0.006 | 0.70583 | −0.00517 | 0.00517 | 0.73% | yes |
+| PixAUC | not reported (excluded, p.9) | 0.96751 | N/A | N/A | N/A | — |
+
+Excluded context (different experimental setting, NOT compared): `DAE paper.pdf`
+p.9 Table 3, DAE(α=16,σ=0.2) on that paper's own BraTS pipeline — pixel AUPRC
+0.833±0.005, dDice 0.773±0.004. Machine-readable: `artifacts/results/reference.json`.
 
 ## Known paper↔repo differences to confirm once PDFs arrive
 

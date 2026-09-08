@@ -7,13 +7,13 @@ segmentation. Status: COMPLETE — full 250-epoch P100 run finished, evaluated, 
 numbers from executed runs.
 
 ## 2. Source repositories
-- Codebase: reconstruction implementation in this repo (MIT-licensed, see LICENSE).
-- Delivery: `https://github.com/Anamitra-Sarkar/DAE-method`, branch `main`
-
+- Upstream: `https://github.com/caiyu6666/MedIAnomaly` (`upstream/main`).
+- Delivery: `https://github.com/Anamitra-Sarkar/DAE-method`, branch `client/dae-reproduction`
+  (based on upstream) + `main` (delivery subset).
 
 ## 3. Exact Git commit
 - Upstream base: `507201cb8e604b7d970c388784f55c06bb32d013`.
-- Delivery commits: see `git log` on `main`.
+- Delivery commits: see `git log` on `main` / `client/dae-reproduction`.
 
 ## 4. Dataset source
 Zenodo `MedIAnomaly-Data` record 12677223, file `BraTS2021.tar.gz` (70,262,263 B,
@@ -48,7 +48,8 @@ seed 0, fold 0. Unchanged from repo.
 ## 10. Training procedure
 Kaggle: clone public branch, verify data, `train.py -d brats -m dae -g 0
 --input-size 128 -bs 16 -f 0 --train-seed 0`, WANDB offline. Codespace CPU:
-audit + `debug_dae.py` + `tiny_run.py` (2ep/bs8/seed0, still running at push time).
+audit + `debug_dae.py` + `tiny_run.py` (2ep/bs8/seed0; proved data loading on CPU,
+could not finish an epoch in 25 min — feasibility finding: GPU required).
 
 ## 11. Evaluation procedure
 `test.py -d brats -m dae -g 0 --input-size 128 -f 0 -save`; bs=1; score map =
@@ -60,13 +61,28 @@ AUC 0.8570, AP 0.9329, PixAUC 0.9675, PixAP 0.7495, BestDice 0.7058 @ 0.0680,
 normal 0.00275 / abnormal 0.01211. Raw: `artifacts/metrics/metrics.txt`;
 tables: `artifacts/results/final_results.{csv,md,xlsx}`.
 
-## 13. Reference comparison
-N/A — no published benchmark table available in this environment and client PDFs
-outstanding, so deltas cannot be computed. Training-curve context: val AUC peaked
-at ep25 (0.8907) then plateaued 0.86–0.88 through ep250 (final 0.8570); PixAP
-peaked ep25 (0.8183), final 0.7495. Mild post-ep25 plateau/overfit; reported value
-follows repo protocol (final checkpoint, not best). Classification: Reasonably
-consistent pipeline reproduction; numerical reference comparison pending table.
+## 13. Reference comparison (source: `medianomaly.pdf`)
+Published DAE BraTS2021 values — Table 6 p.11 (image: AUC 85.9±1.0, AP 93.4±0.5)
+and Table 7 p.12 (pixel: APpix 75.5±0.7, ⌈Dice⌉ 71.1±0.6); paper = mean±std over
+3 seeds, reproduction = single seed 0. Paper terms mapped: AP→AP, APpix→PixAP,
+⌈Dice⌉→BestDice (dataset-wise best Dice at optimal test operating point, p.9).
+
+| Metric | Published | Reproduced | Diff (rep−pub) | |Diff| | % diff | Within pub. std |
+|---|---|---|---|---|---|---|
+| AUC | 0.859±0.010 | 0.85699 | −0.00201 | 0.00201 | 0.23% | yes |
+| AP | 0.934±0.005 | 0.93286 | −0.00114 | 0.00114 | 0.12% | yes |
+| PixAP | 0.755±0.007 | 0.74949 | −0.00551 | 0.00551 | 0.73% | yes |
+| Dice | 0.711±0.006 | 0.70583 | −0.00517 | 0.00517 | 0.73% | yes |
+| PixAUC | not reported (excluded by design, p.9) | 0.96751 | N/A | N/A | N/A | — |
+
+Training-curve context: val AUC peaked at ep25 (0.8907) then plateaued 0.86–0.88
+through ep250 (final 0.8570); reported value follows repo protocol (final
+checkpoint, not best). Excluded context (different setting, NOT compared):
+`DAE paper.pdf` p.9 Table 3, DAE(α=16,σ=0.2) pixel AUPRC 0.833±0.005 /
+dDice 0.773±0.004 on that paper's own BraTS pipeline.
+Classification: **near-exact/consistent reproduction** — every metric within one
+published std of the reference mean. Full table: `artifacts/results/final_results.*`;
+machine-readable source: `artifacts/results/reference.json`.
 
 ## 14. Visual results
 `artifacts/visualizations/montage.png` (real P100 checkpoint, CPU-rendered:
