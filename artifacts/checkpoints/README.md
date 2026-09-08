@@ -4,7 +4,7 @@ The trained checkpoint is 119MB, over GitHub's 100MB single-file limit, so it is
 published as a release asset rather than committed:
 
 - Release: https://github.com/Anamitra-Sarkar/DAE-method/releases/tag/v0.1-dae-brats-p100
-- File: `model.pt` (124,780,544 bytes)
+- File: `model.pt` (124,194,868 bytes)
 - sha256: `d862a22413b75fe0e987dc4d0972d0aa9415135333ad968299d42144fa05505e`
 
 Download:
